@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Demo SMS portal (test fixture)</title>
+<style>#terms, #dashboard, #balance-tip { display: none; }</style>
+</head>
+<body>
+<!-- A fake portal for the browser tests: login form, a terms pop-up, a balance shown in the
+     page and a second balance that only appears on hover (written in Bangla digits). -->
+<form id="login">
+  <input id="name" autocomplete="off">
+  <input id="password" type="password">
+  <button id="login-btn" type="submit">Login</button>
+</form>
+
+<div id="terms">
+  <p>Our terms have changed.</p>
+  <button id="agree"><span>Agree</span></button>
+</div>
+
+<div id="dashboard">
+  <ul><li>Cur. Balance: <span id="current">৳ 1,23,456.50</span></li></ul>
+  <span id="dollar" role="img" aria-label="dollar">$</span>
+  <div id="balance-tip">API Balance : <strong>৪২,০০০.৭৫</strong></div>
+</div>
+
+<script>
+  const show = (id) => { document.getElementById(id).style.display = 'block'; };
+  const hide = (id) => { document.getElementById(id).style.display = 'none'; };
+  document.getElementById('login').addEventListener('submit', (event) => {
+    event.preventDefault();
+    const ok = document.getElementById('name').value === 'demo-user'
+      && document.getElementById('password').value === 'demo-pass';
+    if (!ok) {
+      document.body.insertAdjacentHTML('beforeend', '<p id="error">Invalid login</p>');
+      return;
+    }
+    hide('login');
+    show('terms');
+  });
+  document.getElementById('agree').addEventListener('click', () => { hide('terms'); show('dashboard'); });
+  document.getElementById('dollar').addEventListener('mouseover', () => show('balance-tip'));
+</script>
+</body>
+</html>

@@ -1,0 +1,48 @@
+# Portal definitions. URLs and selectors below are examples; point them at your SMS gateway
+# portals. Credentials are never written here, only the names of the environment variables
+# that hold them (see .env.example).
+#
+# Selectors are CSS by default; prefix with "xpath:" for XPath.
+
+portals:
+  - name: bulk_sms_primary
+    label: Bulk SMS (primary account)
+    url: https://bulksms.example.com/#/login
+    username_env: PRIMARY_SMS_USER
+    password_env: PRIMARY_SMS_PASSWORD
+    low_balance: 5000
+    currency: BDT
+    selectors:
+      username: "#name"
+      password: "#password"
+      balance: "xpath://li[contains(., 'Cur. Balance:')]//span"
+
+  - name: bulk_sms_backup
+    label: Bulk SMS (backup account)
+    url: https://bulksms.example.com/#/login
+    username_env: BACKUP_SMS_USER
+    password_env: BACKUP_SMS_PASSWORD
+    low_balance: 2000
+    selectors:
+      username: "#name"
+      password: "#password"
+      balance: "xpath://li[contains(., 'Cur. Balance:')]//span"
+
+  # A portal with an OTP step, a terms pop-up and a balance that only shows on hover.
+  - name: api_sms_gateway
+    label: API SMS gateway
+    url: https://gateway.example.com/signin
+    username_env: GATEWAY_SMS_USER
+    password_env: GATEWAY_SMS_PASSWORD
+    low_balance: 10000
+    otp:
+      page_url_contains: /verify-otp
+      done_url_contains: /home
+      timeout_seconds: 300
+    selectors:
+      username: "#username"
+      password: "#password"
+      dismiss:
+        - "xpath://button[span[contains(text(), 'Agree')]]"
+      hover_before_balance: "xpath://span[@role='img' and @aria-label='dollar']"
+      balance: "xpath://div[contains(text(), 'API Balance')]//strong"

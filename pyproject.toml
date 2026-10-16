@@ -1,0 +1,40 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "sms-balance-monitor"
+version = "1.0.0"
+description = "Config-driven Selenium bot that logs in to SMS gateway portals, reads the remaining balance and alerts before it runs out."
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "MIT" }
+authors = [{ name = "Nur Mohammad Siddiq" }]
+keywords = ["selenium", "web-automation", "monitoring", "alerting", "sms"]
+dependencies = [
+  "selenium>=4.15",
+  "PyYAML>=6.0",
+  "python-dotenv>=1.0",
+  "requests>=2.31",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=8.0", "ruff>=0.5"]
+
+[project.scripts]
+sms-balance = "sms_balance.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+markers = ["browser: drives a real headless Chrome against a local fixture page"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"
+src = ["src", "tests"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B", "UP", "SIM"]
